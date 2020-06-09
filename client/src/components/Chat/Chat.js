@@ -19,7 +19,7 @@ class Chat extends React.Component {
     }
 
     this.ENDPOINT = "https://chatty-simple-chat-app.herokuapp.com/";
-    this.ENDPOINT = "localhost:5000";
+    //this.ENDPOINT = "localhost:5000";
 
     this.socket = io(this.ENDPOINT);
 
