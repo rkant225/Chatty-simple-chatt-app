@@ -12,7 +12,7 @@ function Home({history}) {
     return (
         <div className="outer-container">
             <div className="join-chat-container">
-                <h1>Enter your name and join chat room.</h1>
+                <h4>Enter your name and join chat room.</h4>
                 <input type="text" value={name} placeholder="Name" onChange={(e)=> setName(e.target.value)} onKeyPress={(e)=>{if(e.key==='Enter' && name)history.push(`/chat/${name}`)}}/>
                 <br/>
                 <button disabled={!name} onClick={()=> history.push(`/chat/${name}`) }>Join Chat</button>

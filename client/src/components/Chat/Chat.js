@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import logo from '../../assets/logo.png';
 import closeIcon from '../../assets/close.png';
 import Message from './Message';
-import { Link } from 'react-router-dom';
+import Modal from '../Modal/Modal';
 
 
 class Chat extends React.Component {
@@ -14,10 +14,13 @@ class Chat extends React.Component {
       name : "", 
       message : "",
       messages : [],
-      usersCount : 0
+      connectedUsers : [],
+      showModal : false
     }
 
+    this.ENDPOINT = "https://chatty-simple-chat-app.herokuapp.com/";
     this.ENDPOINT = "localhost:5000";
+
     this.socket = io(this.ENDPOINT);
 
     this.chatBoxRef = React.createRef();
@@ -33,8 +36,8 @@ class Chat extends React.Component {
       this.setState({messages : [...this.state.messages, messageObj]})
     });
 
-    this.socket.on('usersCount', (usersCount) =>{
-      this.setState({usersCount : usersCount})
+    this.socket.on('usersList', (users) =>{
+      this.setState({connectedUsers : users})
     })
 
   }
@@ -70,6 +73,31 @@ class Chat extends React.Component {
     this.props.history.push('/');
   }
 
+  modelActions = () =>{
+    return(
+        <React.Fragment>
+            <button onClick={this.closeModal} className="red-button">Close</button>
+            <button onClick={this.closeModal} className="green-button">OK</button>
+        </React.Fragment>
+    );
+  }
+
+  displayModal =()=>{
+    this.setState({showModal : true});
+  }
+
+  closeModal =()=>{
+    this.setState({showModal : false});
+  }
+
+  getListOfUsers = () =>{
+    return this.state.connectedUsers.map((user,i)=>{
+      return(
+      <li key={i} className="list-item">{user}</li>
+      );
+    })
+  }
+
   render(){
     const {message} = this.state;
 
@@ -80,7 +108,7 @@ class Chat extends React.Component {
 
         <div className="details">
           <div className="current-user">Current User : {this.state.name}</div>
-          <div className="total-user">Total Users joined : {this.state.usersCount}</div>
+          <div onClick={()=>this.displayModal()} className="total-user">Total Users joined : {this.state.connectedUsers.length}</div>
         </div>
         <div ref={this.chatBoxRef} className="chat-container">
           <Message messages={this.state.messages} userName={this.state.name}/>
@@ -92,7 +120,13 @@ class Chat extends React.Component {
               <button className="send-btn" disabled={!message} onClick={()=> this.sendMessage()} >SEND</button>
             </form>
         </div>
-        <Link to="/">Home</Link>
+        {this.state.showModal && 
+        <Modal 
+          onCancle={this.closeModal}
+          title={"List of connected users."}
+          content={this.getListOfUsers()}
+          actions={this.modelActions()}
+        />}
       </div>
     );
 
