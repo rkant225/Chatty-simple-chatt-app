@@ -1,8 +1,6 @@
 html {
   height: 100%;
 }
-body {
-}
 
 body{
   height: 100%;
@@ -156,10 +154,10 @@ body{
 
 .join-chat-container{
   display: inline-block;
+  width: 90%;
   text-align: center;
   border-radius: 10px;
   background-color: rgb(40, 241, 83);
-  height: auto;
   margin: auto;
   margin-top: 15%;
   margin-bottom: 15%;
