@@ -37,6 +37,11 @@ class Message extends React.Component {
               );
             }
           })}
+
+        {/* <div className="action-controller">
+              <input className="message-input" type="text" value={this.props.message} placeholder="Type message...." onChange={(e)=> this.props.handleMessageTextBox(e)} onKeyPress={(e)=>{if(e.key === 'Enter' && this.props.message)this.props.sendMessage()}}/>
+              <button className="send-btn" disabled={!this.props.message} onClick={()=> this.props.sendMessage()} >SEND</button>
+        </div> */}
         </div>
     );
 

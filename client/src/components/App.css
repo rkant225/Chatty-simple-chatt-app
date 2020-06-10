@@ -1,6 +1,14 @@
+html {
+  height: 100%;
+}
+body {
+}
 
 body{
   height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   /* background-image: linear-gradient(white, rgba(0,0,255,0.5)); */
   background-image: linear-gradient(white, rgba(0, 255, 106, 0.89));
   font-size: 20px;
@@ -30,8 +38,7 @@ body{
   width: 80%;
   margin: auto;
   border: 2px solid black;
-  margin-bottom: 15px;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   overflow: auto;
 }
 
@@ -41,7 +48,7 @@ body{
 
 .message-container{
   background-color: seashell;
-  max-width: 40%;
+  width: 40%;
   margin: 5px;
   border-radius: 5px;
   padding: 2px;
@@ -85,26 +92,45 @@ body{
   width: 80%;
   margin: auto;
   text-align: center;
+  display: flex;
+  flex-direction:row;
 }
 
 .message-input{
+  top: 0;
+  left: 0;
   display: inline-block;
-  width: 70%;
-  padding: 5px;
+  width: 100%;
   font-size: 20px;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 0px 0px 0px 10px;
   outline: none;
+  flex-grow: 2;
+  padding: 10px;
+}
+
+.send-icon{
+  width: 2%;
+  height: auto;
+  display: inline-block;
+  margin-right: 20px;
+  cursor: pointer;
 }
 
 .send-btn{
-  height: 3rem;
+  border:1px solid blue;
+  font-size: 20px;
+  background:rgb(17, 235, 28);
+  color:black;
+  border-radius: 0px 0px 10px 0px;
+  outline: none;
+  /* height: 3rem;
   border-radius: 90px;
   cursor: pointer;
   border: none;
-  outline: none;
+  
   background-color: rgb(168, 243, 47);
-  margin-left: 5px;
+  margin-left: 5px; */
 }
 
 .send-btn:hover{
@@ -113,7 +139,8 @@ body{
 }
 
 .send-btn:disabled{
-  background-color: red;
+  background-color: gray;
+  color: rgb(192, 190, 187);
   cursor: default;
 }
 

@@ -2,6 +2,12 @@ import React from 'react';
 import io from 'socket.io-client';
 import logo from '../../assets/logo.png';
 import closeIcon from '../../assets/close.png';
+import sendIcon from '../../assets/send.png'
+
+import userMsgTone_path from '../../assets/userMsgTone.mp3';
+import adminMsgTone_path from '../../assets/adminMsgTone.mp3';
+
+
 import Message from './Message';
 import Modal from '../Modal/Modal';
 
@@ -9,6 +15,9 @@ import Modal from '../Modal/Modal';
 class Chat extends React.Component {
   constructor(props){
     super(props);
+
+    this.adminMsgTone = new Audio(adminMsgTone_path);
+    this.userMsgTone = new Audio(userMsgTone_path);
 
     this.state={
       name : "", 
@@ -33,17 +42,24 @@ class Chat extends React.Component {
     this.socket.emit('join', name, ()=>{})
     
     this.socket.on('message', (messageObj)=>{
-      this.setState({messages : [...this.state.messages, messageObj]})
+      this.setState({messages : [...this.state.messages, messageObj]});
+      if(messageObj && messageObj.user === 'admin'){
+        this.adminMsgTone.play();
+      } else {
+        if(messageObj && messageObj.user !== this.state.name){
+          this.userMsgTone.play();
+        }
+      }
     });
 
     this.socket.on('usersList', (users) =>{
       this.setState({connectedUsers : users})
     })
-
   }
 
   componentWillUnmount(){
     //this.socket.emit('exit',{});
+    this.socket.off();
   }
 
   // For auto scrolling of chat box
@@ -82,6 +98,10 @@ class Chat extends React.Component {
     );
   }
 
+  handleMessageTextBox =(e)=>{
+    this.setState({message : e.target.value})
+  }
+
   displayModal =()=>{
     this.setState({showModal : true});
   }
@@ -111,19 +131,18 @@ class Chat extends React.Component {
           <div onClick={()=>this.displayModal()} className="total-user">Total Users joined : {this.state.connectedUsers.length}</div>
         </div>
         <div ref={this.chatBoxRef} className="chat-container">
-          <Message messages={this.state.messages} userName={this.state.name}/>
+          <Message messages={this.state.messages} message={message} userName={this.state.name} sendMessage={this.sendMessage} handleMessageTextBox={this.handleMessageTextBox}/>
         </div>
 
         <div className="action-controller">
-            <form>
-              <input className="message-input" type="text" value={message} placeholder="Type message...." onChange={(e)=> this.setState({message : e.target.value})} onKeyPress={(e)=>{if(e.key === 'Enter' && this.state.message)this.sendMessage()}}/>
+              <input className="message-input" type="text" value={message} placeholder="Type message...." onChange={(e)=> this.handleMessageTextBox(e)} onKeyPress={(e)=>{if(e.key === 'Enter' && this.state.message)this.sendMessage()}}/>
               <button className="send-btn" disabled={!message} onClick={()=> this.sendMessage()} >SEND</button>
-            </form>
         </div>
+
         {this.state.showModal && 
         <Modal 
           onCancle={this.closeModal}
-          title={"List of connected users."}
+          title={"List of connected users"}
           content={this.getListOfUsers()}
           actions={this.modelActions()}
         />}
